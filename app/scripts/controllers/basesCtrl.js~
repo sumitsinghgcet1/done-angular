@@ -1,0 +1,86 @@
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name storeClientApp.controller:BasesCtrl
+ * @description
+ * # BasesCtrl
+ * Controller of the storeClientApp
+ */
+angular.module('storeClientApp')
+  .controller('BasesCtrl', function ($scope, getCollection, addEntity) {
+
+      $scope.isGrid = 1;
+      $scope.entityList = [];
+      $scope.show = false;
+
+      $scope.setBaseId = function (baseId) {
+          $scope.baseId = baseId;
+      };
+
+	  $scope.getBaseList = function(){
+		  $scope.entityList = [];
+		  getCollection.query('bases').then(
+			  function (response) {
+				  $scope.error = 0;
+				  $scope.entityList = response.data;
+			  },
+			  function () {
+				  $scope.error = 1;
+			  }
+		  );
+	  };
+
+	  /*$scope.getBaseList();
+
+      // Add a Base
+      $scope.saveBase = function () {
+          var baseName = $scope.newbasename;
+
+          var data = JSON.parse('{' +
+              '"Name":"' + baseName + '"}'
+          );
+
+          //Access the Base service (change data in backend)
+          addEntity.save('bases', data).then(
+          function () {
+              // Update the model property
+              $scope.entityList.push(data);
+              $scope.error = 0;
+              $scope.OutputLabel = 'Base saved successfully.';
+          },
+          function () {
+              $scope.error = 1;
+              $scope.OutputLabel = 'Base could not be saved.';
+          });
+          $scope.show = true;
+      };
+
+      // Edit a Base
+      $scope.editBase = function () {
+          var i = null;
+          var baseId = $scope.baseId;
+          var baseName = $scope.newbasename;
+
+          var data = JSON.parse('{' +
+              '"Id":' + baseId + ',' +
+              '"Name":"' + baseName + '"}'
+          );
+
+          editEntity.put('bases', baseId, data).then(
+          function () {
+              for (i in $scope.entityList) {
+                  if ($scope.entityList[i].Id === baseId) {
+                      $scope.entityList[i].Name = baseName;
+                  }
+              }
+              $scope.error = 0;
+              $scope.OutputLabel = 'Base edited successfully.';
+          },
+          function () {
+              $scope.error = 1;
+              $scope.OutputLabel = 'Base could not be edited.';
+          });
+          $scope.show = true;
+      };*/
+  });

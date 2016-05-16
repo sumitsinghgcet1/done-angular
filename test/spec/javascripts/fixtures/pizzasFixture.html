@@ -1,0 +1,97 @@
+<html>
+<head>
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-sm-6 col-xs-6">
+            <input type="text" class="form-control" ng-model="pizzaname" placeholder="Search Pizzas" />
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-xs-6">
+            <button id="addpizzabutton" type="button" ng-click="setPizzaId('');loadAllBases();loadAllToppings();" data-toggle="modal" class="btn btn-primary col-md-6" data-target="#pizzaModal">Add Pizza</button>
+            <button type="button" ng-click="isGrid=1" class="btn btn-default col-md-3"><span class="glyphicon glyphicon-th" aria-hidden="true"></span></button>
+            <button type="button" ng-click="isGrid=0" class="btn btn-default col-md-3"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></button>
+        </div>
+    </div>
+    .s<br/>
+
+    <div ng-show="show == 1" class="alert alert-success" role="alert">{{OutputLabel}}</div>
+
+
+    <div class="row">
+        <div ng-show="isGrid == 1" class="col-md-4" ng-repeat="entity in entityList | filter:pizzaname">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4><strong ng-bind="entity.name"></strong></h4>
+                </div>
+                 <div class="row panel-body">
+                    <div class="col-md-8">
+                        <dl class="text-primary">
+                            <dt>Base</dt>
+                            <dd>{{entity.base.name}}</dd>
+                            <br />
+                            <dt>Topping List</dt>
+                            <dd><span ng-repeat="obj in entity.toppings">{{obj.name}} </span></dd>
+                            <br />
+                            <dt>Price</dt>
+                            <dd>{{entity.price}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-4">
+                        <!-- Edit Pizza -->
+                        <button id="editpizzabutton" type="button" ng-click="setPizzaId(entity.id);loadAllBases();loadAllToppings();" data-toggle="modal" data-target="#pizzaModal" class="btn btn-default pull-right" data-pizzaname="{{entity.name}}" data-pizzaprice="{{entity.price}}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <!-- Pizza Add/Edit Modal dialog-->
+    <div class="modal fade" id="pizzaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Pizza</h4>
+                </div>
+                <div ng-show="error == 1" class="alert alert-danger" role="alert">{{saveError}}</div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="pizza-name" class="control-label">Pizza Name:</label>
+                            <input type="text" class="form-control" ng-model="newpizzaname" id="pizza-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="base-name" class="control-label">Base:</label>
+                            <select class="form-control" id="base-name" ng-options="base.id as base.name for base in allBasesList" ng-model="selectedbase">
+                                <option value="">*blank*</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="toppings-name" class="control-label">Toppings:</label>
+                            <div ng-repeat="obj in allToppingsList" class="checkbox">
+                                <label>
+                                    <input type="checkbox" value="{{obj.id}}" ng-model="obj.selected">
+                                    {{obj.name}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pizza-price" class="control-label">Price:</label>
+                            <input type="text" class="form-control" ng-model="newpizzaprice" id="pizza-price">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="closeButton" ng-click="closeModal();" class="btn btn-default">Close</button>
+                    <button type="button" id="savebutton" ng-click="savePizza(false);" class="btn btn-primary">Save changes</button>
+                    <button type="button" id="editbutton" ng-click="savePizza(true);" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="base/app/scripts/common.js" ></script>
+</html>

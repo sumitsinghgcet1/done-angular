@@ -1,0 +1,131 @@
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-sm-6 col-xs-6">
+            <input type="text" class="form-control" ng-model="orderid" placeholder="Search Orders" />
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-xs-6">
+            <button type="button" id="addorderbutton" ng-click="setOrderId('');loadAllPizzas();" data-toggle="modal" class="btn btn-primary col-md-6" data-target="#orderModal">Add Order</button>
+            <button type="button" ng-click="isGrid=1" class="btn btn-default col-md-3"><span class="glyphicon glyphicon-th" aria-hidden="true"></span></button>
+            <button type="button" ng-click="isGrid=0" class="btn btn-default col-md-3"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></button>
+        </div>
+    </div>
+    <br />
+    <!-- Show the result -->
+    <div ng-show="show == 1" class="alert alert-success" role="alert">{{OutputLabel}}</div>
+
+    <div class="row">
+        <div ng-show="isGrid == 1" class="col-md-4" ng-repeat="entity in entityList | filter:orderid">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4>Order No: <strong ng-bind="entity.id"></strong></h4>
+                </div>
+                <div class="row panel-body">
+                    <div class="col-md-8">
+                        <dl class="text-primary">
+                            <dt>Pizza List</dt>
+                            <dd><span ng-repeat="obj in entity.pizzas">{{obj.name}} </span></dd>
+							<br />
+                            <dt>Total Price</dt>
+                            <dd>{{entity.totalPrice}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-4">
+                        <!-- Edit/Delete Order -->
+                        <button type="button" id="editorderbutton"  ng-click="setOrderId(entity.id);loadAllPizzas();" data-toggle="modal" data-target="#orderModal" class="btn btn-default" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                        <button type="button" ng-click="setOrderId(entity.id);" data-toggle="modal" data-target="#orderDeleteModal" class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="isGrid == 0">
+            <div class="panel panel-info">
+                <div class="panel-heading text-primary">Order Listing</div>
+                <table class="table table-hover text-primary">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Pizza List</th>
+                        <th>Total Price</th>
+                        <th></th>
+                    </tr>
+                    <tr ng-repeat="entity in entityList | filter:ordername">
+                        <td>{{entity.id}}</td>
+                        <td><span ng-repeat="obj in entity.pizzas">{{obj.name}} </span></td>
+                        <td>{{entity.totalPrice}}</td>
+                        <td>
+                            <!-- Edit Order -->
+                            <button type="button" ng-click="setOrderId(entity.id);loadAllPizzas();" data-toggle="modal" data-target="#orderModal" class="btn btn-default" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+							<button type="button" ng-click="setOrderId(entity.id);" data-toggle="modal" data-target="#orderDeleteModal" class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Add/Edit Modal dialog-->
+    <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add Order</h4>
+                </div>
+                <div ng-show="error == 1" class="alert alert-danger" role="alert">{{saveError}}</div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h5>Tick the pizzas you want to add to the order:</h5>
+                                </div>
+                                <div class="row panel-body">
+                                    <div class="col-md-12">
+                                        <div ng-repeat="obj in pizzaToAddList" class="checkbox">
+                                            <label>
+                                                <input type="checkbox" value="{{obj.id}}" ng-model="obj.selected">
+                                                {{obj.name}} - Price ({{obj.price}})
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="closeButton" ng-click="closeModal();" class="btn btn-default">Close</button>
+                    <button type="button" id="savebutton" ng-click="saveOrder(false);" class="btn btn-primary">Save Order</button>
+                    <button type="button" id="editbutton" ng-click="saveOrder(true);" class="btn btn-primary">Save Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="orderDeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Delete Order</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label class="control-label">Do you really want to delete the Order ?</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="yesbutton" ng-click="deleteOrder();" data-dismiss="modal" class="btn btn-primary">Yes</button>
+                    <button type="button" id="nobutton" data-dismiss="modal" class="btn btn-primary">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+</div>
+<script src="scripts/common.js"></script>

@@ -1,0 +1,74 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-sm-6 col-xs-6">
+            <input type="text" class="form-control" ng-model="toppingname" placeholder="Search Toppings" />
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-xs-6">
+            <button type="button" data-toggle="modal" class="btn btn-primary col-md-6" data-target="#toppingModal">Add Topping</button>
+            <button type="button" ng-click="isGrid=1" class="btn btn-default col-md-3"><span class="glyphicon glyphicon-th" aria-hidden="true"></span></button>
+            <button type="button" ng-click="isGrid=0" class="btn btn-default col-md-3"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></button>
+        </div>
+    </div>
+    <br />
+    <!-- Show the result -->
+    <div ng-show="show == 1" class="alert alert-success" role="alert">{{OutputLabel}}</div>
+    
+    <div class="row">
+        <div ng-show="isGrid == 1" class="col-md-4" ng-repeat="entity in entityList | filter:toppingname">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4> </h4>
+                </div>
+                <div class="row panel-body">
+                    <div class="col-md-8">
+                        <dl class="text-primary">
+                            <dd><strong ng-bind="entity.name"></strong></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="isGrid == 0">
+            <div class="panel panel-info">
+                <table class="table table-hover text-primary">
+                    <tr>
+                        <th>Topping Name</th>
+                    </tr>
+                    <tr ng-repeat="entity in entityList | filter:toppingname">
+                        <td>{{entity.name}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- topping Add/Edit Modal dialog-->
+    <div class="modal fade" id="toppingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add topping</h4>
+                </div>
+                <div ng-show="error == 1" class="alert alert-danger" role="alert">{{saveError}}</div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="topping-name" class="control-label">topping Name:</label>
+                            <input type="text" class="form-control" ng-model="newtoppingname" id="topping-name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="closeModal();"data-dismiss="modal">Close</button>
+                    <button type="button" id="savebutton" ng-click="saveTopping();" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+</div>
+<script src="scripts/common.js"></script>
